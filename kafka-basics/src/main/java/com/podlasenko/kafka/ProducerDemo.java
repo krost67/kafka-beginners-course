@@ -13,7 +13,7 @@ public class ProducerDemo {
     private final static Logger log = LoggerFactory.getLogger(ProducerDemo.class.getSimpleName());
 
     public static void main(String[] args) {
-        log.info("----- main start -----");
+        log.info("Producer demo starts....");
 
         // create Producer Properties
         Properties properties = new Properties();
@@ -38,6 +38,6 @@ public class ProducerDemo {
         // flush and close
         producer.close();
 
-        log.info("----- main end -----");
+        log.info("Producer demo completed.");
     }
 }

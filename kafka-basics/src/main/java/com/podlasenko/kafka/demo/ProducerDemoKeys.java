@@ -1,5 +1,7 @@
-package com.podlasenko.kafka;
+package com.podlasenko.kafka.demo;
 
+import com.podlasenko.kafka.utils.KafkaUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
@@ -11,21 +13,21 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
+
+/**
+ * Demo for sending records with keys to Kafka topic by Producer
+ * Process callback
+ */
+@Slf4j
 public class ProducerDemoKeys {
-    private final static Logger log = LoggerFactory.getLogger(ProducerDemoKeys.class.getSimpleName());
-    private final static String KAFKA_TOPIC = "demo_java";
 
     public static void main(String[] args) {
         log.info("Producer demo with keys starts....");
 
-        // create Producer Properties
-        Properties properties = new Properties();
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-
         // create the producer
-        KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
+        KafkaProducer<String, String> producer = new KafkaProducer<>(
+                KafkaUtils.getKafkaProducerProperties());
 
         // send the data with callback - asynchronous
         for (int i = 0; i < 10; i++) {
@@ -34,7 +36,7 @@ public class ProducerDemoKeys {
 
             // create a producer record
             ProducerRecord<String, String> producerRecord = new ProducerRecord<>(
-                    KAFKA_TOPIC,
+                    KAFKA_TOPIC_NAME,
                     recordKey,
                     recordValue);
 

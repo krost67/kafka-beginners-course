@@ -2,16 +2,11 @@ package com.podlasenko.kafka.demo;
 
 import com.podlasenko.kafka.utils.KafkaUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Collections;
-import java.util.Properties;
 
 import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
 

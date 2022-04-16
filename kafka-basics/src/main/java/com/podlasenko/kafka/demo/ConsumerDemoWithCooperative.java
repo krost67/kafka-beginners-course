@@ -2,27 +2,33 @@ package com.podlasenko.kafka.demo;
 
 import com.podlasenko.kafka.utils.KafkaUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.CooperativeStickyAssignor;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
 
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Properties;
 
 import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
 
 /**
- * Demo for pooling records from Kafka topic with shutdown by Consumer
+ * Demo for pooling records from Kafka topic by Consumer
+ * with shutdown and cooperative re-balance
  */
 @Slf4j
-public class ConsumerDemoWithShutdown {
+public class ConsumerDemoWithCooperative {
 
     public static void main(String[] args) {
-        log.info("Consumer demo with shutdown starts....");
+        log.info("Consumer demo with cooperative re-balance starts....");
 
         // Create consumer
-        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(
-                KafkaUtils.getKafkaConsumerProperties());
+        Properties kafkaConfig = KafkaUtils.getKafkaConsumerProperties();
+        kafkaConfig.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG,
+                CooperativeStickyAssignor.class.getName());
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaConfig);
 
         // get a reference to a current thread
         final Thread mainThread = Thread.currentThread();

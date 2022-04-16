@@ -2,15 +2,12 @@ package com.podlasenko.kafka.demo;
 
 import com.podlasenko.kafka.utils.KafkaUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.*;
-import org.apache.kafka.common.serialization.StringSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.TimeZone;
 
 import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;

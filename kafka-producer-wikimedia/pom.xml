@@ -16,7 +16,6 @@
         <dependency>
             <groupId>com.podlasenko</groupId>
             <artifactId>kafka-basics</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>

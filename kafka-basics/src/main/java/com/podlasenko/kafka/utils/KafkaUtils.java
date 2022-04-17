@@ -14,6 +14,9 @@ public class KafkaUtils {
     public static final String KAFKA_TOPIC_NAME = "demo_java";
     public static final String KAFKA_CONSUMER_GROUP_ID = "first-group";
 
+    public static final String WIKIMEDIA_TOPIC_NAME = "wikimedia.recentchange";
+    public static final String WIKIMEDIA_URL = "https://stream.wikimedia.org/v2/stream/recentchange";
+
     /**
      * create Producer config
      */

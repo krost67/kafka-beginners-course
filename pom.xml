@@ -12,26 +12,45 @@
 
     <modules>
         <module>kafka-basics</module>
+        <module>kafka-producer-wikimedia</module>
     </modules>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <kafka.client.version>3.1.0</kafka.client.version>
+        <lombok.version>1.18.22</lombok.version>
         <slf4j.version>1.7.36</slf4j.version>
+        <http.version>4.9.3</http.version>
+        <http.event.source.version>2.5.0</http.event.source.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.podlasenko</groupId>
+                <artifactId>kafka-basics</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.kafka</groupId>
                 <artifactId>kafka-clients</artifactId>
                 <version>${kafka.client.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${http.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.launchdarkly</groupId>
+                <artifactId>okhttp-eventsource</artifactId>
+                <version>${http.event.source.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.22</version>
+                <version>${lombok.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>

@@ -10,9 +10,14 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>kafka-basics</artifactId>
+    <artifactId>kafka-producer-wikimedia</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.podlasenko</groupId>
+            <artifactId>kafka-basics</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
@@ -20,6 +25,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.launchdarkly</groupId>
+            <artifactId>okhttp-eventsource</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -30,5 +43,4 @@
             <artifactId>slf4j-simple</artifactId>
         </dependency>
     </dependencies>
-
 </project>

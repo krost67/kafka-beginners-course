@@ -22,10 +22,17 @@ public class WikimediaChangesProducer {
 
     public static void main(String[] args) throws InterruptedException {
         Properties producerConfig = KafkaUtils.getKafkaProducerProperties();
+
         // set safe producer config (only for Kafka version <= 2.8 )
         producerConfig.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
         producerConfig.put(ProducerConfig.ACKS_CONFIG, "all");
         producerConfig.put(ProducerConfig.RETRIES_CONFIG, String.valueOf(Integer.MAX_VALUE));
+
+        // set high throughput producer configs
+        // enable batch sending with compression
+        producerConfig.put(ProducerConfig.LINGER_MS_CONFIG, "20");
+        producerConfig.put(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(32 * 1024));
+        producerConfig.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
 
         // create the producer
         KafkaProducer<String, String> producer = new KafkaProducer<>(producerConfig);

@@ -13,6 +13,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.podlasenko</groupId>
+            <artifactId>kafka-basics</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
         </dependency>

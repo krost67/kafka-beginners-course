@@ -12,15 +12,15 @@ import org.opensearch.client.RestHighLevelClient;
 
 import java.net.URI;
 
+import static com.podlasenko.kafka.utils.KafkaUtils.OPEN_SEARCH_URL;
+
 @Slf4j
 public class OpenSearchClientUtil {
 
     public static RestHighLevelClient createOpenSearchClient() {
-        String connString = "http://localhost:9200";
-
-        // we build a URI from the connection string
+        // we build a URI from the OpenSearch URL
         RestHighLevelClient restHighLevelClient;
-        URI connUri = URI.create(connString);
+        URI connUri = URI.create(OPEN_SEARCH_URL);
         // extract login information if it exists
         String userInfo = connUri.getUserInfo();
 

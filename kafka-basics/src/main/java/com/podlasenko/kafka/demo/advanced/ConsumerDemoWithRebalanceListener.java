@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
 
-import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
+import static com.podlasenko.kafka.utils.KafkaUtils.*;
 
 /**
  * Demo for pooling records from Kafka topic by Consumer
@@ -35,7 +35,7 @@ public class ConsumerDemoWithRebalanceListener {
         log.info("I am a Kafka Consumer with a Rebalance");
 
         // create consumer configs
-        Properties kafkaConfig = KafkaUtils.getKafkaConsumerProperties();
+        Properties kafkaConfig = KafkaUtils.getKafkaConsumerProperties(KAFKA_BOOTSTRAP_SERVER, KAFKA_CONSUMER_FIRST_GROUP_ID);
         // we disable Auto Commit of offsets
         kafkaConfig.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
 

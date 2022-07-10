@@ -1,5 +1,6 @@
 package com.podlasenko.kafka.opensearch;
 
+import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -44,7 +45,12 @@ public class OpenSearchConsumer {
             while (true) {
                 ConsumerRecords<String, String> records = consumeWikimediaData(consumer);
                 for (ConsumerRecord<String, String> record : records) {
-                    sendRecordToOpenSearch(openSearchClient, record.value());
+                    // two strategies to avoid duplicates
+                    // 1. set your own id
+                    // String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+                    // 2. (better way) set id from record if exist
+                    String id = extractId(record.value());
+                    sendRecordToOpenSearch(openSearchClient, record.value(), id);
                 }
             }
         }
@@ -67,9 +73,22 @@ public class OpenSearchConsumer {
         return records;
     }
 
-    private static void sendRecordToOpenSearch(RestHighLevelClient openSearchClient, String recordValue) throws IOException {
+    private static String extractId(String recordValue) {
+        // using gson library to parse JSON
+        return JsonParser.parseString(recordValue)
+                .getAsJsonObject()
+                .get("meta")
+                .getAsJsonObject()
+                .get("id")
+                .getAsString();
+    }
+
+    private static void sendRecordToOpenSearch(RestHighLevelClient openSearchClient,
+                                               String recordValue,
+                                               String id) throws IOException {
         try {
             IndexRequest request = new IndexRequest(WIKIMEDIA_INDEX_NAME)
+                    .id(id)
                     .source(recordValue, XContentType.JSON);
             IndexResponse response = openSearchClient.index(request, RequestOptions.DEFAULT);
             log.info("Inserted document with id: " + response.getId() + " into OpenSearch");

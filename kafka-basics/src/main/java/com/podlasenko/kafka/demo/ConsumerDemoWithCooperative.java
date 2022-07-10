@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.Properties;
 
-import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
+import static com.podlasenko.kafka.utils.KafkaUtils.*;
 
 /**
  * Demo for pooling records from Kafka topic by Consumer
@@ -25,7 +25,7 @@ public class ConsumerDemoWithCooperative {
         log.info("Consumer demo with cooperative re-balance starts....");
 
         // Create consumer
-        Properties kafkaConfig = KafkaUtils.getKafkaConsumerProperties();
+        Properties kafkaConfig = KafkaUtils.getKafkaConsumerProperties(KAFKA_BOOTSTRAP_SERVER, KAFKA_CONSUMER_FIRST_GROUP_ID);
         kafkaConfig.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG,
                 CooperativeStickyAssignor.class.getName());
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaConfig);

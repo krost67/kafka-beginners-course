@@ -9,7 +9,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import java.time.Duration;
 import java.util.Collections;
 
-import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
+import static com.podlasenko.kafka.utils.KafkaUtils.*;
 
 /**
  * Demo for pooling records from Kafka topic with shutdown by Consumer
@@ -22,7 +22,7 @@ public class ConsumerDemoWithShutdown {
 
         // Create consumer
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(
-                KafkaUtils.getKafkaConsumerProperties());
+                KafkaUtils.getKafkaConsumerProperties(KAFKA_BOOTSTRAP_SERVER, KAFKA_CONSUMER_FIRST_GROUP_ID));
 
         // get a reference to a current thread
         final Thread mainThread = Thread.currentThread();

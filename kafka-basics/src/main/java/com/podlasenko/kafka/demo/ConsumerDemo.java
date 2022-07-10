@@ -8,7 +8,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import java.time.Duration;
 import java.util.Collections;
 
-import static com.podlasenko.kafka.utils.KafkaUtils.KAFKA_TOPIC_NAME;
+import static com.podlasenko.kafka.utils.KafkaUtils.*;
 
 /**
  * Demo for pooling records from Kafka topic by Consumer
@@ -21,7 +21,7 @@ public class ConsumerDemo {
 
         // Create consumer
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(
-                KafkaUtils.getKafkaConsumerProperties());
+                KafkaUtils.getKafkaConsumerProperties(KAFKA_BOOTSTRAP_SERVER, KAFKA_CONSUMER_FIRST_GROUP_ID));
 
         // Subscribe to kafka topic(s)
         consumer.subscribe(Collections.singleton(KAFKA_TOPIC_NAME));

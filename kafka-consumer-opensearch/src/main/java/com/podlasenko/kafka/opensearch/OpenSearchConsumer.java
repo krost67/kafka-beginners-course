@@ -5,8 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.opensearch.action.bulk.BulkRequest;
+import org.opensearch.action.bulk.BulkResponse;
 import org.opensearch.action.index.IndexRequest;
-import org.opensearch.action.index.IndexResponse;
 import org.opensearch.client.RequestOptions;
 import org.opensearch.client.RestHighLevelClient;
 import org.opensearch.client.indices.CreateIndexRequest;
@@ -44,14 +45,22 @@ public class OpenSearchConsumer {
             // consuming data
             while (true) {
                 ConsumerRecords<String, String> records = consumeWikimediaData(consumer);
+                // create a bulk request to improve performance
+                BulkRequest bulkRequest = new BulkRequest();
+
                 for (ConsumerRecord<String, String> record : records) {
                     // two strategies to avoid duplicates
                     // 1. set your own id
                     // String id = record.topic() + "_" + record.partition() + "_" + record.offset();
                     // 2. (better way) set id from record if exist
                     String id = extractId(record.value());
-                    sendRecordToOpenSearch(openSearchClient, record.value(), id);
+                    IndexRequest request = new IndexRequest(WIKIMEDIA_INDEX_NAME)
+                            .id(id)
+                            .source(record.value(), XContentType.JSON);
+                    bulkRequest.add(request);
                 }
+
+                sendBulkToOpenSearch(openSearchClient, bulkRequest);
             }
         }
     }
@@ -83,15 +92,13 @@ public class OpenSearchConsumer {
                 .getAsString();
     }
 
-    private static void sendRecordToOpenSearch(RestHighLevelClient openSearchClient,
-                                               String recordValue,
-                                               String id) throws IOException {
+    private static void sendBulkToOpenSearch(RestHighLevelClient openSearchClient,
+                                             BulkRequest bulkRequest) {
         try {
-            IndexRequest request = new IndexRequest(WIKIMEDIA_INDEX_NAME)
-                    .id(id)
-                    .source(recordValue, XContentType.JSON);
-            IndexResponse response = openSearchClient.index(request, RequestOptions.DEFAULT);
-            log.info("Inserted document with id: " + response.getId() + " into OpenSearch");
+            if (bulkRequest.numberOfActions() > 0) {
+                BulkResponse response = openSearchClient.bulk(bulkRequest, RequestOptions.DEFAULT);
+                log.info("Inserted " + response.getItems().length + " record(s) into OpenSearch");
+            }
         } catch (Exception e) {
             //TODO fix
         }
